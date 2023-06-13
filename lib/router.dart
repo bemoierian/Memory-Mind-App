@@ -11,7 +11,7 @@ class AppRouter {
   late HomeWebServices homeWebServices;
   late HomeRepository homeRepository;
   late HomeCubit homeCubit;
-  Router() {
+  AppRouter() {
     homeWebServices = HomeWebServices();
     homeRepository = HomeRepository(homeWebServices);
     homeCubit = HomeCubit(homeRepository);

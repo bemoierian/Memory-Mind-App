@@ -1,28 +1,30 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class HomeWebServices {
   late Dio dio;
 
   HomeWebServices() {
     BaseOptions options = BaseOptions(
-      baseUrl: "localhost:8080/",
+      baseUrl: "http://localhost:8080/",
       receiveDataWhenStatusError: true,
-      // connectTimeout: 30 * 1000,
-      // receiveTimeout: 30 * 1000,
+      // connectTimeout: const Duration(seconds: 30),
+      // receiveTimeout: const Duration(seconds: 30),
     );
     dio = Dio(options);
   }
 
   Future<dynamic> getUserMedia(String token) async {
     try {
-      var res = await dio.get('user-media',
-          options: Options(
-            headers: {"Authorization": "Bearer $token"},
-          ));
-      // print(res.data);
+      var res = await dio.get(
+        'feed/user-media',
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+      print(res.data);
       return res.data;
-    } on DioException catch (e) {
+    } catch (e) {
       debugPrint("Media $e");
       return {};
     }
