@@ -26,15 +26,26 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            children: [
-              const MediaCard(mediaURL: "", title: "title"),
-            ],
-          ),
-        ],
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          if (state is HomeLoaded) {
+            return GridView.count(
+              crossAxisCount: 5,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              shrinkWrap: true,
+              children: [
+                ...state.media.media!.map((e) {
+                  return MediaCard(
+                    mediaURL: e.fileUrl!,
+                    title: "",
+                  );
+                }).toList()
+              ],
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
