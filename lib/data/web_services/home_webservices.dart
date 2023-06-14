@@ -22,7 +22,7 @@ class HomeWebServices {
           headers: {"Authorization": "Bearer $token"},
         ),
       );
-      print(res.data);
+      // print(res.data);
       return res.data;
     } catch (e) {
       debugPrint("Media $e");
