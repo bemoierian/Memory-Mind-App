@@ -20,13 +20,17 @@ class MediaCard extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           // image
           SizedBox(
             width: 170,
             height: 170,
+            child: Image(
+              image: NetworkImage(mediaURL),
+              fit: BoxFit.cover,
+            ),
           ),
-          Text("Title")
+          Text(title),
         ],
       ),
     );
