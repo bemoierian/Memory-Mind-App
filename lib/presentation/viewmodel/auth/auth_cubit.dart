@@ -3,6 +3,7 @@ import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/data/repository/auth_repository.dart';
 
 import '../../../data/models/sign_in_req_model.dart';
+import '../../../data/models/signin_res_model.dart';
 
 part 'auth_state.dart';
 
@@ -29,7 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signIn(signInReqModel).then((res) {
         if (res.userId != null) {
-          emit(AuthSignUpSuccessful());
+          emit(AuthSignInSuccessful(res));
         } else {
           emit(AuthError(res.message ?? "Error In Sign In"));
         }

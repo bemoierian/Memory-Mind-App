@@ -8,7 +8,10 @@ class AuthLoading extends AuthState {}
 
 class AuthSignUpSuccessful extends AuthState {}
 
-class AuthSignInSuccessful extends AuthState {}
+class AuthSignInSuccessful extends AuthState {
+  final SignInResModel user;
+  AuthSignInSuccessful(this.user);
+}
 
 class AuthError extends AuthState {
   final String message;
