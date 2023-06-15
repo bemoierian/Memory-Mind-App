@@ -8,10 +8,10 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   final HomeRepository homeRepository;
   HomeCubit(this.homeRepository) : super(HomeInitial());
-  void getUserMedia() {
+  void getUserMedia(String token) {
     try {
       emit(HomeLoading());
-      homeRepository.getUserMedia("").then((media) {
+      homeRepository.getUserMedia(token).then((media) {
         emit(HomeLoaded(media));
       });
     } catch (e) {

@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:memory_mind_app/constants/strings.dart';
-import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 
-class SignUp extends StatelessWidget {
-  final TextEditingController nameInput = TextEditingController();
+import '../../data/models/sign_in_req_model.dart';
+
+class SignIn extends StatelessWidget {
   final TextEditingController emailInput = TextEditingController();
   final TextEditingController pwInput = TextEditingController();
-  SignUp({super.key});
+  SignIn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign Up"),
+        title: const Text("Sign In"),
         centerTitle: true,
       ),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is AuthSignUpSuccessful) {
+          if (state is AuthSignInSuccessful) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("${state.message}, Log in to continue"),
+              const SnackBar(
+                content: Text("Sign In Successful"),
               ),
             );
-            Navigator.of(context).pushReplacementNamed(signInPageRoute);
+            Navigator.pop(context);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -41,15 +40,6 @@ class SignUp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextField(
-                  decoration: const InputDecoration(
-                      hintText: "Enter your name",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: nameInput,
-                ),
                 TextField(
                   decoration: const InputDecoration(
                       hintText: "Enter your email",
@@ -70,12 +60,10 @@ class SignUp extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    BlocProvider.of<AuthCubit>(context).signUp(SignUpReqModel(
-                        name: nameInput.text,
-                        email: emailInput.text,
-                        password: pwInput.text));
+                    BlocProvider.of<AuthCubit>(context).signIn(SignInReqModel(
+                        email: emailInput.text, password: pwInput.text));
                   },
-                  child: const Text("Sign Up"),
+                  child: const Text("Sign In"),
                 ),
               ],
             ),

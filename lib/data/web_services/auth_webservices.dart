@@ -25,6 +25,11 @@ class AuthWebServices {
       return res.data;
     } catch (e) {
       debugPrint("Signup Error in webservice\n $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          return e.response?.data;
+        }
+      }
       return {};
     }
   }
@@ -39,6 +44,11 @@ class AuthWebServices {
       return res.data;
     } catch (e) {
       debugPrint("Signin Error in webservice\n $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          return e.response?.data;
+        }
+      }
       return {};
     }
   }

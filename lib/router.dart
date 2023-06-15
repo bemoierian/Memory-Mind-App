@@ -4,6 +4,7 @@ import 'package:memory_mind_app/data/repository/home_repository.dart';
 import 'package:memory_mind_app/data/web_services/auth_webservices.dart';
 import 'package:memory_mind_app/data/web_services/home_webservices.dart';
 import 'package:memory_mind_app/presentation/view/home.dart';
+import 'package:memory_mind_app/presentation/view/signin.dart';
 import 'package:memory_mind_app/presentation/view/signup.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/home/home_cubit.dart';
@@ -54,6 +55,17 @@ class AppRouter {
               ),
             ],
             child: SignUp(),
+          ),
+        );
+      case signInPageRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: authCubit,
+              ),
+            ],
+            child: SignIn(),
           ),
         );
       default:
