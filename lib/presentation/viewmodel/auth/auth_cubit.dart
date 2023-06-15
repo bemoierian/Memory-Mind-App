@@ -39,4 +39,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError("Error In Sign In"));
     }
   }
+
+  void logOut() {
+    emit(AuthLoggedOut());
+  }
 }
