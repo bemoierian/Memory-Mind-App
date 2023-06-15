@@ -9,7 +9,7 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository authRepository;
-  AuthCubit(this.authRepository) : super(AuthInitial());
+  AuthCubit(this.authRepository) : super(AuthLoggedOut());
   void signUp(SignUpReqModel signUpReqModel) {
     try {
       emit(AuthLoading());
