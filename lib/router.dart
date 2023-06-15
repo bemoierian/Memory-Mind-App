@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/data/repository/home_repository.dart';
 import 'package:memory_mind_app/data/web_services/home_webservices.dart';
 import 'package:memory_mind_app/presentation/view/home.dart';
-import 'package:memory_mind_app/presentation/viewmodel/cubit/home_cubit.dart';
+import 'package:memory_mind_app/presentation/viewmodel/home/home_cubit.dart';
 
 import 'constants/strings.dart';
 

@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/strings.dart';
+
 class HomeWebServices {
   late Dio dio;
 
   HomeWebServices() {
     BaseOptions options = BaseOptions(
-      baseUrl: "http://localhost:8080/",
+      baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
       // connectTimeout: const Duration(seconds: 30),
       // receiveTimeout: const Duration(seconds: 30),

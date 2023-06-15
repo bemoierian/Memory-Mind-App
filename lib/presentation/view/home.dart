@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
-import 'package:memory_mind_app/presentation/viewmodel/cubit/home_cubit.dart';
+
+import '../viewmodel/home/home_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

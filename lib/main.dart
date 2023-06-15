@@ -9,7 +9,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final AppRouter router;
-  MyApp({required this.router, super.key});
+  const MyApp({required this.router, super.key});
 
   // This widget is the root of your application.
   @override
