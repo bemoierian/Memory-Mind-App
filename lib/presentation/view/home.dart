@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 
+import '../../constants/strings.dart';
 import '../viewmodel/home/home_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -26,6 +27,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, signUpPageRoute);
+              },
+              child: const Text("Sign Up"))
+        ],
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {

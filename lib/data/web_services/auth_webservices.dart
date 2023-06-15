@@ -17,7 +17,7 @@ class AuthWebServices {
 
   Future<dynamic> signUp(Map<String, dynamic> signUpReqModel) async {
     try {
-      var res = await dio.post(
+      var res = await dio.put(
         'auth/signup',
         data: signUpReqModel,
       );

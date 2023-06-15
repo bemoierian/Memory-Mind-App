@@ -6,7 +6,10 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthSignUpSuccessful extends AuthState {}
+class AuthSignUpSuccessful extends AuthState {
+  final String message;
+  AuthSignUpSuccessful(this.message);
+}
 
 class AuthSignInSuccessful extends AuthState {
   final SignInResModel user;

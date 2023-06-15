@@ -15,7 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signup(signUpReqModel).then((res) {
         if (res.userId != null) {
-          emit(AuthSignUpSuccessful());
+          emit(AuthSignUpSuccessful(res.message ?? "Sign Up Successful"));
         } else {
           emit(AuthError(res.message ?? "Error In Sign Up"));
         }
