@@ -200,6 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     const SizedBox(height: 30),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BlocBuilder<RemindMeCubit, RemindMeState>(
                           builder: (context, state) {
