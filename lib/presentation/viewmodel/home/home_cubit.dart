@@ -9,12 +9,33 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   final HomeRepository homeRepository;
   HomeCubit(this.homeRepository) : super(HomeInitial());
-  void getUserMedia({required String token, int? page, int? items}) {
+  int currPage = 1;
+  final int items = 15;
+  void getUserMedia({required String token}) {
     try {
-      emit(HomeLoading());
+      // debugPrint("fetching page $currPage");
+      if (state is HomeLoading) return;
+      MediaModel oldMedia = MediaModel();
+      // if the home page is loaded before, store the old media
+      if (state is HomeLoaded) {
+        // emit(HomeLoading(oldMedia: oldMedia))
+        oldMedia = (state as HomeLoaded).media;
+      }
+      emit(HomeLoading(oldMedia: oldMedia, firstTime: currPage == 1));
       homeRepository
-          .getUserMedia(token: token, page: page, items: items)
+          .getUserMedia(token: token, page: currPage, items: items)
           .then((media) {
+        // final oldMediaList = oldMedia.media!;
+        // if the home is loaded for the first time, just emit the new media
+        if (currPage == 1) {
+          emit(HomeLoaded(media));
+          currPage = currPage + 1;
+          return;
+        }
+        // if the home is loaded before, add the new media to the old media
+        currPage = currPage + 1;
+        oldMedia.media!.addAll(media.media!);
+        media.media = oldMedia.media;
         emit(HomeLoaded(media));
       });
     } catch (e) {
@@ -23,6 +44,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void resetUserMedia() {
+    currPage = 1;
     emit(HomeInitial());
   }
 

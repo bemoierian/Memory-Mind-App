@@ -4,13 +4,17 @@ abstract class HomeState {}
 
 class HomeInitial extends HomeState {}
 
-class HomeLoading extends HomeState {}
+class HomeLoading extends HomeState {
+  final MediaModel oldMedia;
+  final bool firstTime;
+  HomeLoading({required this.oldMedia, this.firstTime = false});
+}
 
 class HomeLoaded extends HomeState {
   final MediaModel media;
   HomeLoaded(this.media);
   HomeLoaded copyWith(MediaModel newMedia) {
-    media.media!.add(newMedia.media![0]);
+    media.media!.insert(0, newMedia.media![0]);
     return HomeLoaded(media);
   }
 }

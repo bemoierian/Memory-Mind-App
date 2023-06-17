@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
@@ -22,6 +25,20 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleInput = TextEditingController();
   final TextEditingController contentInput = TextEditingController();
   DateTime currDate = DateTime.now();
+  final scrollController = ScrollController();
+  bool setupFirstTime = true;
+
+  void setupScrollController(context, String token) {
+    debugPrint("Setting up scroll controller");
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          BlocProvider.of<HomeCubit>(context).getUserMedia(token: token);
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     // BlocProvider.of<HomeCubit>(context).getUserMedia();
@@ -62,30 +79,57 @@ class _MyHomePageState extends State<MyHomePage> {
             // debugPrint("Getting user media");
             BlocProvider.of<HomeCubit>(context)
                 .getUserMedia(token: state.user.token!);
+            if (setupFirstTime) {
+              setupScrollController(context, state.user.token!);
+
+              setupFirstTime = false;
+            }
           } else if (state is AuthLoggedOut) {
             // debugPrint("Reseting user media");
             BlocProvider.of<HomeCubit>(context).resetUserMedia();
           }
           return BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              if (state is HomeLoaded) {
-                return GridView.count(
-                  padding: const EdgeInsets.all(20),
-                  crossAxisCount: 5,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  shrinkWrap: true,
-                  children: [
-                    ...state.media.media!.map((e) {
-                      return MediaCard(
-                        mediaURL: e.fileUrl!,
-                        title: "",
-                      );
-                    }).toList()
-                  ],
-                );
+              bool isloading = false;
+              List<Media> media = [];
+              if (state is HomeLoading && state.firstTime) {
+                return const Center(child: CircularProgressIndicator());
               }
-              return const SizedBox();
+              if (state is HomeLoading) {
+                media = state.oldMedia.media!;
+                isloading = true;
+              }
+              if (state is HomeLoaded) {
+                media = state.media.media!;
+              }
+              return GridView.builder(
+                padding: const EdgeInsets.all(20),
+                controller: scrollController,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 300,
+                    // childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20),
+                shrinkWrap: true,
+                itemCount: media.length,
+                itemBuilder: (context, index) {
+                  // if (index < media.length) {
+                  return MediaCard(
+                    mediaURL: media[index].fileUrl!,
+                    title: media[index].title!,
+                  );
+                  // }
+                },
+
+                // children: [
+                //   ...state.media.media!.map((e) {
+                //     return MediaCard(
+                //       mediaURL: e.fileUrl!,
+                //       title: "",
+                //     );
+                //   }).toList()
+                // ],
+              );
             },
           );
         },
