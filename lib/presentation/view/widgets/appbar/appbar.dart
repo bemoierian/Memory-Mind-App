@@ -7,9 +7,13 @@ import '../../../viewmodel/auth/auth_cubit.dart';
 class MemoryMindAppBar extends StatelessWidget {
   final String title;
   final bool isSignedIn;
+  final int pageNumber;
 
   const MemoryMindAppBar(
-      {required this.title, required this.isSignedIn, super.key});
+      {required this.title,
+      required this.isSignedIn,
+      this.pageNumber = 0,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,9 @@ class MemoryMindAppBar extends StatelessWidget {
         children: [
           TextButton(
             onPressed: (() {
-              Navigator.pushNamed(context, homePageRoute);
+              if (pageNumber != 0) {
+                Navigator.pushNamed(context, homePageRoute);
+              }
             }),
             child: Text(title, style: Theme.of(context).textTheme.headline6),
           ),

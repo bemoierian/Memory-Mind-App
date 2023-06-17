@@ -33,7 +33,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             return MemoryMindAppBar(
-                title: appTitle, isSignedIn: state is AuthSignInSuccessful);
+              title: appTitle,
+              isSignedIn: state is AuthSignInSuccessful,
+              pageNumber: 0,
+            );
           },
         ),
       ),

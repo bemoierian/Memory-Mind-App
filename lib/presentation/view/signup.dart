@@ -19,6 +19,7 @@ class SignUp extends StatelessWidget {
         child: MemoryMindAppBar(
           title: appTitle,
           isSignedIn: false,
+          pageNumber: 2,
         ),
       ),
       body: BlocListener<AuthCubit, AuthState>(
