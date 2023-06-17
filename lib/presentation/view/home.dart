@@ -20,6 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // BlocProvider.of<HomeCubit>(context).getUserMedia();
+    // BlocProvider.of<AuthCubit>(context).signInFromSharedPrefs();
+
     super.initState();
   }
 
@@ -35,35 +37,38 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      body: BlocListener<AuthCubit, AuthState>(
-        listener: (context, state) {
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          // debugPrint("Auth state changed");
           if (state is AuthSignInSuccessful) {
+            // debugPrint("Getting user media");
             BlocProvider.of<HomeCubit>(context).getUserMedia(state.user.token!);
           } else if (state is AuthLoggedOut) {
+            // debugPrint("Reseting user media");
             BlocProvider.of<HomeCubit>(context).resetUserMedia();
           }
+          return BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              if (state is HomeLoaded) {
+                return GridView.count(
+                  crossAxisCount: 5,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  shrinkWrap: true,
+                  children: [
+                    ...state.media.media!.map((e) {
+                      return MediaCard(
+                        mediaURL: e.fileUrl!,
+                        title: "",
+                      );
+                    }).toList()
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          );
         },
-        child: BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            if (state is HomeLoaded) {
-              return GridView.count(
-                crossAxisCount: 5,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                shrinkWrap: true,
-                children: [
-                  ...state.media.media!.map((e) {
-                    return MediaCard(
-                      mediaURL: e.fileUrl!,
-                      title: "",
-                    );
-                  }).toList()
-                ],
-              );
-            }
-            return const SizedBox();
-          },
-        ),
       ),
     );
   }

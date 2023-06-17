@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:memory_mind_app/router.dart';
+import 'package:memory_mind_app/utils/shared_prefs.dart';
 
 import 'constants/strings.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefsUtils.init();
   runApp(MyApp(router: AppRouter()));
 }
 
