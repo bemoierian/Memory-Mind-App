@@ -47,7 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 pageNumber: 0,
                 uploadOnClickFunction: () {
                   showUploadDialog(context, state.user.token!);
-                  // _pickImageWeb(context, state.user.token!);
                 },
               );
             }
@@ -95,26 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
-  }
-
-  // Future _pickImageWeb(context, String token) async {
-  //   try {
-  //     final imagePicker =
-  //         await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (imagePicker == null) return;
-  //     selectedImageName = imagePicker.name;
-  //     selectedImageMimeType = imagePicker.mimeType;
-  //     // debugPrint("Name: $name, Type: $type");
-  //     bytes = await imagePicker.readAsBytes();
-  //   } on PlatformException catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
-
-  void uploadMedia(Uint8List mediaBytes, String name, String mimeType,
-      String title, String content, String token) {
-    BlocProvider.of<HomeCubit>(context)
-        .uploadMedia(mediaBytes, name, mimeType, title, content, token);
   }
 
   void showUploadDialog(parentContext, String token) {
