@@ -59,7 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // debugPrint("Auth state changed");
           if (state is AuthSignInSuccessful) {
             // debugPrint("Getting user media");
-            BlocProvider.of<HomeCubit>(context).getUserMedia(state.user.token!);
+            BlocProvider.of<HomeCubit>(context)
+                .getUserMedia(token: state.user.token!);
           } else if (state is AuthLoggedOut) {
             // debugPrint("Reseting user media");
             BlocProvider.of<HomeCubit>(context).resetUserMedia();

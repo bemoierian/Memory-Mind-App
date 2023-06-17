@@ -19,10 +19,19 @@ class HomeWebServices {
     dio = Dio(options);
   }
 
-  Future<dynamic> getUserMedia(String token) async {
+  Future<dynamic> getUserMedia(
+      {int? page, int? items, required String token}) async {
     try {
+      final queryParams = <String, dynamic>{};
+      if (page != null) {
+        queryParams["page"] = page;
+      }
+      if (items != null) {
+        queryParams["items"] = items;
+      }
       var res = await dio.get(
         'feed/user-media',
+        queryParameters: queryParams,
         options: Options(
           headers: {"Authorization": "Bearer $token"},
         ),

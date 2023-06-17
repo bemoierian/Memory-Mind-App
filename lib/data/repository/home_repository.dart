@@ -8,9 +8,11 @@ class HomeRepository {
 
   HomeRepository(this.homeWebServices);
 
-  Future<MediaModel> getUserMedia(String token) async {
+  Future<MediaModel> getUserMedia(
+      {required String token, int? page, int? items}) async {
     try {
-      final media = await homeWebServices.getUserMedia(token);
+      final media = await homeWebServices.getUserMedia(
+          token: token, page: page, items: items);
       final mediaModel = MediaModel.fromJson(media);
       // print(mediaModel.media![0].fileUrl!);
       return mediaModel;
