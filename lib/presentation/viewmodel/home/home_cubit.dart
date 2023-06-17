@@ -27,12 +27,13 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void uploadMedia(Uint8List mediaBytes, String name, String mimeType,
-      String title, String content, String token) {
+      String title, String content, String? remindeMeDate, String token) {
     if (mimeType == "") {
       return;
     }
     homeRepository
-        .uploadMedia(mediaBytes, name, mimeType, title, content, token)
+        .uploadMedia(
+            mediaBytes, name, mimeType, title, content, remindeMeDate, token)
         .then((media) {
       if (state is HomeLoaded) {
         emit((state as HomeLoaded).copyWith(media));

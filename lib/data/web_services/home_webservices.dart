@@ -44,17 +44,27 @@ class HomeWebServices {
     }
   }
 
-  Future<dynamic> uploadMedia(Uint8List fileAsBytes, String name,
-      String mimeType, String title, String content, String token) async {
+  Future<dynamic> uploadMedia(
+      Uint8List fileAsBytes,
+      String name,
+      String mimeType,
+      String title,
+      String content,
+      String? remindeMeDate,
+      String token) async {
     final mediaType1 = mimeType.split('/')[0];
     final mediaType2 = mimeType.split('/')[1];
     try {
-      FormData formData = FormData.fromMap({
+      Map<String, dynamic> body = {
         "file": MultipartFile.fromBytes(fileAsBytes,
             filename: name, contentType: MediaType(mediaType1, mediaType2)),
         "title": title,
         "content": content,
-      });
+      };
+      if (remindeMeDate != null) {
+        body["reminderDate"] = remindeMeDate;
+      }
+      FormData formData = FormData.fromMap(body);
       Response response = await dio.post('feed/upload-media',
           data: formData,
           options: Options(

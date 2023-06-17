@@ -225,6 +225,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 state.selectedImageMimeType,
                                 titleInput.text,
                                 contentInput.text,
+                                BlocProvider.of<RemindMeCubit>(parentContext)
+                                        .value
+                                    ? DateTime(currDate.year, currDate.month,
+                                            currDate.day, 12, 0, 0)
+                                        .toIso8601String()
+                                    : null,
                                 token,
                               );
                               Navigator.pop(context);
