@@ -8,11 +8,13 @@ class MemoryMindAppBar extends StatelessWidget {
   final String title;
   final bool isSignedIn;
   final int pageNumber;
+  final uploadOnClickFunction;
 
   const MemoryMindAppBar(
       {required this.title,
       required this.isSignedIn,
       this.pageNumber = 0,
+      this.uploadOnClickFunction,
       super.key});
 
   @override
@@ -35,9 +37,20 @@ class MemoryMindAppBar extends StatelessWidget {
           ),
           isSignedIn
               ? ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    uploadOnClickFunction();
+                  },
+                  icon: const Icon(Icons.file_upload_outlined),
                   label: const Text("Upload"),
+                  style: const ButtonStyle(
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
                 )
               : const SizedBox(),
           const Spacer(),

@@ -1,5 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
@@ -32,9 +36,19 @@ class _MyHomePageState extends State<MyHomePage> {
         preferredSize: const Size.fromHeight(56),
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
-            return MemoryMindAppBar(
+            if (state is AuthSignInSuccessful) {
+              return MemoryMindAppBar(
+                title: appTitle,
+                isSignedIn: true,
+                pageNumber: 0,
+                uploadOnClickFunction: () {
+                  _pickImageWeb(context, state.user.token!);
+                },
+              );
+            }
+            return const MemoryMindAppBar(
               title: appTitle,
-              isSignedIn: state is AuthSignInSuccessful,
+              isSignedIn: false,
               pageNumber: 0,
             );
           },
@@ -74,5 +88,21 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  Future _pickImageWeb(context, String token) async {
+    try {
+      final imagePicker =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (imagePicker == null) return;
+      final name = imagePicker.name;
+      final type = imagePicker.mimeType;
+      // debugPrint("Name: $name, Type: $type");
+      Uint8List imageBytes = await imagePicker.readAsBytes();
+      BlocProvider.of<HomeCubit>(context)
+          .uploadMedia(imageBytes, name, type ?? "", "image", "content", token);
+    } on PlatformException catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
