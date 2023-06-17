@@ -1,13 +1,10 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/image_picker/image_picker_cubit.dart';
+import 'package:memory_mind_app/presentation/viewmodel/remind_me/remind_me_cubit.dart';
 
 import '../../constants/strings.dart';
 import '../viewmodel/home/home_cubit.dart';
@@ -24,7 +21,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleInput = TextEditingController();
   final TextEditingController contentInput = TextEditingController();
-
+  DateTime currDate = DateTime.now();
   @override
   void initState() {
     // BlocProvider.of<HomeCubit>(context).getUserMedia();
@@ -100,12 +97,20 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog(
         context: parentContext,
         builder: (BuildContext context) {
-          return BlocProvider.value(
-            value: BlocProvider.of<ImagePickerCubit>(parentContext),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<ImagePickerCubit>(parentContext),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<RemindMeCubit>(parentContext),
+              ),
+            ],
             child: AlertDialog(
               content: SizedBox(
                 width: 400,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -136,8 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: () {
                             BlocProvider.of<ImagePickerCubit>(parentContext)
                                 .pickImage();
-                            // Navigator.pop(context);
-                            // _pickImageWeb(context, state.user.token!);
                           },
                           child: const Text("Choose Image"),
                         ),
@@ -160,6 +163,54 @@ class _MyHomePageState extends State<MyHomePage> {
                             maxWidth: 300,
                           )),
                       controller: contentInput,
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        BlocBuilder<RemindMeCubit, RemindMeState>(
+                          builder: (context, state) {
+                            return Switch(
+                              value:
+                                  BlocProvider.of<RemindMeCubit>(parentContext)
+                                      .value,
+                              onChanged: (value) {
+                                BlocProvider.of<RemindMeCubit>(parentContext)
+                                    .changeValue(value);
+                              },
+                            );
+                          },
+                        ),
+                        const Text("Remind me"),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    BlocBuilder<RemindMeCubit, RemindMeState>(
+                      builder: (context, state) {
+                        return BlocProvider.of<RemindMeCubit>(parentContext)
+                                .value
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 1),
+                                          firstDate: DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 1),
+                                          lastDate:
+                                              DateTime(DateTime.now().year + 5),
+                                          currentDate: currDate)
+                                      .then((value) {
+                                    currDate = value!;
+                                  });
+                                },
+                                child: const Text("Choose Date"),
+                              )
+                            : const SizedBox();
+                      },
                     ),
                     const SizedBox(height: 30),
                     BlocBuilder<ImagePickerCubit, ImagePickerState>(
