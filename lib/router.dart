@@ -8,6 +8,7 @@ import 'package:memory_mind_app/presentation/view/signin.dart';
 import 'package:memory_mind_app/presentation/view/signup.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/home/home_cubit.dart';
+import 'package:memory_mind_app/presentation/viewmodel/image_picker/image_picker_cubit.dart';
 
 import 'constants/strings.dart';
 import 'data/repository/auth_repository.dart';
@@ -16,6 +17,7 @@ class AppRouter {
   late HomeWebServices homeWebServices;
   late HomeRepository homeRepository;
   late HomeCubit homeCubit;
+  late ImagePickerCubit imagePickerCubit;
 
   late AuthWebServices authWebServices;
   late AuthRepository authRepository;
@@ -24,6 +26,7 @@ class AppRouter {
     homeWebServices = HomeWebServices();
     homeRepository = HomeRepository(homeWebServices);
     homeCubit = HomeCubit(homeRepository);
+    imagePickerCubit = ImagePickerCubit();
 
     authWebServices = AuthWebServices();
     authRepository = AuthRepository(authWebServices);
@@ -41,6 +44,9 @@ class AppRouter {
               ),
               BlocProvider.value(
                 value: authCubit,
+              ),
+              BlocProvider.value(
+                value: imagePickerCubit,
               ),
             ],
             child: const MyHomePage(title: 'Memory Mind'),

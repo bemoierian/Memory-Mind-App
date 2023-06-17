@@ -56,6 +56,7 @@ class SignIn extends StatelessWidget {
                   controller: emailInput,
                 ),
                 TextField(
+                  obscureText: true,
                   decoration: const InputDecoration(
                       hintText: "Enter your password",
                       constraints: BoxConstraints(
