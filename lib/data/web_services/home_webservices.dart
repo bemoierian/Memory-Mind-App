@@ -71,8 +71,7 @@ class HomeWebServices {
             headers: {"Authorization": "Bearer $token"},
           ));
       debugPrint(
-          "update picture status code ${response.statusCode} new image link : " +
-              response.data.toString());
+          "update picture status code ${response.statusCode} new image link : ${response.data}");
       return response.data;
     } catch (e) {
       debugPrint(e.toString());

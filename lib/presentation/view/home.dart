@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
@@ -37,14 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     });
-  }
-
-  @override
-  void initState() {
-    // BlocProvider.of<HomeCubit>(context).getUserMedia();
-    // BlocProvider.of<AuthCubit>(context).signInFromSharedPrefs();
-
-    super.initState();
   }
 
   @override

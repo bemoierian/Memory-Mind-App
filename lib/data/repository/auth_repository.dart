@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/data/models/signup_res_model.dart';
 
@@ -16,7 +17,7 @@ class AuthRepository {
       final signUpResModel = SignUpResModel.fromJson(res);
       return signUpResModel;
     } catch (e) {
-      print("Error in auth repository - Sign Up:\n $e");
+      debugPrint("Error in auth repository - Sign Up:\n $e");
       return SignUpResModel();
     }
   }
@@ -27,7 +28,7 @@ class AuthRepository {
       final signInResModel = SignInResModel.fromJson(res);
       return signInResModel;
     } catch (e) {
-      print("Error in home repository Sign In:\n $e");
+      debugPrint("Error in home repository Sign In:\n $e");
       return SignInResModel();
     }
   }

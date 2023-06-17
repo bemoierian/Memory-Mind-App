@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/data/web_services/home_webservices.dart';
 
@@ -17,7 +18,7 @@ class HomeRepository {
       // print(mediaModel.media![0].fileUrl!);
       return mediaModel;
     } catch (e) {
-      print("Error in home repository:\n $e");
+      debugPrint("Error in home repository:\n $e");
       return MediaModel();
     }
   }
@@ -37,7 +38,7 @@ class HomeRepository {
       // print(mediaModel.media![0].fileUrl!);
       return mediaModel;
     } catch (e) {
-      print("Error in home repository:\n $e");
+      debugPrint("Error in home repository:\n $e");
       return MediaModel();
     }
   }
