@@ -18,4 +18,8 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError());
     }
   }
+
+  void resetUserMedia() {
+    emit(HomeInitial());
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 
+import '../../constants/strings.dart';
 import '../../data/models/sign_in_req_model.dart';
 
 class SignIn extends StatelessWidget {
@@ -12,9 +14,12 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign In"),
-        centerTitle: true,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: MemoryMindAppBar(
+          title: appTitle,
+          isSignedIn: false,
+        ),
       ),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
@@ -24,7 +29,7 @@ class SignIn extends StatelessWidget {
                 content: Text("Sign In Successful"),
               ),
             );
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacementNamed(homePageRoute);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
