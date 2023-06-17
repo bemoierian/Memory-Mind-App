@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, state) {
               if (state is HomeLoaded) {
                 return GridView.count(
+                  padding: const EdgeInsets.all(20),
                   crossAxisCount: 5,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
