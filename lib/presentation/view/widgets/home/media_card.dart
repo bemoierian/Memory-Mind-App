@@ -36,6 +36,7 @@ class MediaCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+            const SizedBox(height: 20),
             Text(title),
           ],
         ),
