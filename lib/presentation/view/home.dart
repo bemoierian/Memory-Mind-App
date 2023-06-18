@@ -107,6 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   return MediaCard(
                     mediaURL: media[index].fileUrl!,
                     title: media[index].title!,
+                    onTapFunc: () {
+                      showMediaDialog(context, media[index]);
+                    },
                   );
                   // }
                 },
@@ -281,6 +284,107 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void showMediaDialog(parentContext, Media media) {
+    showDialog(
+        context: parentContext,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 20,
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Image.network(
+                            media.fileUrl!,
+                            fit: BoxFit.fitHeight,
+                            // width:
+                            //     MediaQuery.of(context).size.width * 0.8 - 100,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        flex: 7,
+                        child: Container(
+                          // height: double.infinity,
+                          padding: const EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Title",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.title!),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Content",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.content!),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Uploaded at",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.createdAt!),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Modified at",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.updatedAt!),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Email Reminder",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.reminderDate ?? "None"),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Type",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(media.fileType!),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Size",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                  "${(media.fileSize!).toStringAsFixed(2)} MB"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );

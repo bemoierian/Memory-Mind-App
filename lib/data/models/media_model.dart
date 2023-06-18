@@ -37,6 +37,7 @@ class Media {
   String? creator;
   String? createdAt;
   String? updatedAt;
+  String? reminderDate;
   int? iV;
 
   Media(
@@ -49,6 +50,7 @@ class Media {
       this.createdAt,
       this.updatedAt,
       this.fileSize,
+      this.reminderDate,
       this.iV});
 
   Media.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class Media {
     creator = json['creator'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    reminderDate = json['reminderDate'];
     iV = json['__v'];
   }
 
@@ -75,6 +78,7 @@ class Media {
     data['creator'] = this.creator;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['reminderDate'] = this.reminderDate;
     data['__v'] = this.iV;
     return data;
   }
