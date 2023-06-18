@@ -15,8 +15,12 @@ class HomeLoaded extends HomeState {
   HomeLoaded(this.media);
   HomeLoaded copyWith(MediaModel newMedia) {
     media.media!.insert(0, newMedia.media![0]);
+    media.usedStorage = newMedia.usedStorage;
     return HomeLoaded(media);
   }
 }
 
-class HomeError extends HomeState {}
+class HomeError extends HomeState {
+  final String message;
+  HomeError({this.message = "Error in home cubit"});
+}

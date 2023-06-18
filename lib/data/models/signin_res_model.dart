@@ -3,16 +3,23 @@ class SignInResModel {
   String? userId;
   String? name;
   double? usedStorage;
+  double? storageLimit;
   String? message;
 
   SignInResModel(
-      {this.token, this.userId, this.name, this.usedStorage, this.message});
+      {this.token,
+      this.userId,
+      this.name,
+      this.usedStorage,
+      this.message,
+      this.storageLimit});
 
   SignInResModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
     userId = json['userId'];
     name = json['name'];
     usedStorage = json['usedStorage'];
+    storageLimit = json['storageLimit'];
     message = json['message'];
   }
 
@@ -23,6 +30,7 @@ class SignInResModel {
     data['message'] = this.message;
     data['name'] = this.name;
     data['usedStorage'] = this.usedStorage;
+    data['storageLimit'] = this.storageLimit;
     return data;
   }
 }

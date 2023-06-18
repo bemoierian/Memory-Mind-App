@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
+import 'package:memory_mind_app/presentation/view/widgets/home/left_sidebar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/image_picker/image_picker_cubit.dart';
@@ -80,53 +81,64 @@ class _MyHomePageState extends State<MyHomePage> {
           }
           return BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              bool isloading = false;
-              List<Media> media = [];
-              if (state is HomeLoading && state.firstTime) {
-                return const Center(child: CircularProgressIndicator());
+              if (authState is AuthSignInSuccessful) {
+                List<Media> media = [];
+                if (state is HomeLoading && state.firstTime) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (state is HomeLoading) {
+                  media = state.oldMedia.media!;
+                }
+                if (state is HomeLoaded) {
+                  media = state.media.media!;
+                  if (state.media.usedStorage != null) {
+                    // update used storage in authState
+                    authState.user.usedStorage = state.media.usedStorage;
+                    // save user again after storage is updated
+                    BlocProvider.of<AuthCubit>(context)
+                        .saveUserToSharedPrefs(authState.user);
+                  }
+                }
+                return Row(
+                  children: [
+                    LeftSideBar(
+                        userName: authState.user.name!,
+                        planName: "Free",
+                        storageUsed: authState.user.usedStorage!,
+                        storageLimit: authState.user.storageLimit!),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 300,
+                      child: GridView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        controller: scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 300,
+                                // childAspectRatio: 3 / 2,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20),
+                        shrinkWrap: true,
+                        itemCount: media.length,
+                        itemBuilder: (context, index) {
+                          return MediaCard(
+                            mediaURL: media[index].fileUrl!,
+                            title: media[index].title!,
+                            onTapFunc: () {
+                              showMediaDialog(
+                                context,
+                                media[index],
+                                (authState).user.token!,
+                              );
+                            },
+                          );
+                          // }
+                        },
+                      ),
+                    ),
+                  ],
+                );
               }
-              if (state is HomeLoading) {
-                media = state.oldMedia.media!;
-                isloading = true;
-              }
-              if (state is HomeLoaded) {
-                media = state.media.media!;
-              }
-              return GridView.builder(
-                padding: const EdgeInsets.all(20),
-                controller: scrollController,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    // childAspectRatio: 3 / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
-                shrinkWrap: true,
-                itemCount: media.length,
-                itemBuilder: (context, index) {
-                  // if (index < media.length) {
-                  return MediaCard(
-                    mediaURL: media[index].fileUrl!,
-                    title: media[index].title!,
-                    onTapFunc: () {
-                      showMediaDialog(
-                        context,
-                        media[index],
-                        (authState as AuthSignInSuccessful).user.token!,
-                      );
-                    },
-                  );
-                  // }
-                },
-
-                // children: [
-                //   ...state.media.media!.map((e) {
-                //     return MediaCard(
-                //       mediaURL: e.fileUrl!,
-                //       title: "",
-                //     );
-                //   }).toList()
-                // ],
-              );
+              return const SizedBox();
             },
           );
         },

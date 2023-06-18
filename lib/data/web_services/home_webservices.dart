@@ -86,10 +86,10 @@ class HomeWebServices {
             headers: {"Authorization": "Bearer $token"},
           ));
       debugPrint("Delete media status code ${res.statusCode}");
-      return res.statusCode;
+      return res.data;
     } catch (e) {
       debugPrint(e.toString());
-      return 404;
+      return <String, dynamic>{};
     }
   }
 }

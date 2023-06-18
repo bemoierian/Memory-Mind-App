@@ -1,12 +1,14 @@
 class MediaModel {
   String? message;
   List<Media>? media;
+  double? usedStorage;
   int? totalItems;
 
-  MediaModel({this.message, this.media, this.totalItems});
+  MediaModel({this.message, this.media, this.totalItems, this.usedStorage});
 
   MediaModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
+    usedStorage = json['usedStorage'];
     media = <Media>[];
     if (json['media'] != null) {
       json['media'].forEach((v) {
@@ -19,6 +21,7 @@ class MediaModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;
+    data['usedStorage'] = this.usedStorage;
     if (this.media != null) {
       data['media'] = this.media!.map((v) => v.toJson()).toList();
     }

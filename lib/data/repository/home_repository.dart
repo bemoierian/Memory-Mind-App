@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:memory_mind_app/data/models/delete_media_res_model.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/data/web_services/home_webservices.dart';
 
@@ -43,13 +44,13 @@ class HomeRepository {
     }
   }
 
-  Future<int> deleteMedia(String mediaID, String token) async {
+  Future<DeleteMediaResModel> deleteMedia(String mediaID, String token) async {
     try {
-      final int statusCode = await homeWebServices.deleteMedia(mediaID, token);
-      return statusCode;
+      final res = await homeWebServices.deleteMedia(mediaID, token);
+      return DeleteMediaResModel.fromJson(res);
     } catch (e) {
       debugPrint("Error in home repository, delete media:\n $e");
-      return 404;
+      return DeleteMediaResModel();
     }
   }
 }

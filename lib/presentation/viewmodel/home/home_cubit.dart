@@ -25,18 +25,22 @@ class HomeCubit extends Cubit<HomeState> {
       homeRepository
           .getUserMedia(token: token, page: currPage, items: items)
           .then((media) {
-        // final oldMediaList = oldMedia.media!;
-        // if the home is loaded for the first time, just emit the new media
-        if (currPage == 1) {
-          emit(HomeLoaded(media));
+        if (media.message == "Fetched media successfully.") {
+          // final oldMediaList = oldMedia.media!;
+          // if the home is loaded for the first time, just emit the new media
+          if (currPage == 1) {
+            emit(HomeLoaded(media));
+            currPage = currPage + 1;
+            return;
+          }
+          // if the home is loaded before, add the new media to the old media
           currPage = currPage + 1;
-          return;
+          oldMedia.media!.addAll(media.media!);
+          media.media = oldMedia.media;
+          emit(HomeLoaded(media));
+        } else {
+          emit(HomeError(message: media.message ?? "Error in home cubit"));
         }
-        // if the home is loaded before, add the new media to the old media
-        currPage = currPage + 1;
-        oldMedia.media!.addAll(media.media!);
-        media.media = oldMedia.media;
-        emit(HomeLoaded(media));
       });
     } catch (e) {
       emit(HomeError());
@@ -67,11 +71,12 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void deleteMedia(String mediaID, String token) {
-    homeRepository.deleteMedia(mediaID, token).then((statusCode) {
-      if (statusCode == 200) {
+    homeRepository.deleteMedia(mediaID, token).then((res) {
+      if (res.message! == "Deleted file.") {
         if (state is HomeLoaded) {
           final oldMedia = (state as HomeLoaded).media;
           oldMedia.media!.removeWhere((element) => element.sId == mediaID);
+          oldMedia.usedStorage = res.usedStorage;
           emit(HomeLoaded(oldMedia));
         }
       } else {
