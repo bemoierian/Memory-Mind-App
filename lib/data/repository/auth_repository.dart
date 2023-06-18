@@ -32,4 +32,16 @@ class AuthRepository {
       return SignInResModel();
     }
   }
+
+  Future<SignInResModel> getUser(String token) async {
+    try {
+      final res = await authWebServices.getUser(token);
+      var signInResModel = SignInResModel.fromJson(res);
+      signInResModel.token = token;
+      return signInResModel;
+    } catch (e) {
+      debugPrint("Error in home repository get user:\n $e");
+      return SignInResModel();
+    }
+  }
 }

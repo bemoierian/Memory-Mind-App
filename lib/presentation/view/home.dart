@@ -94,9 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (state.media.usedStorage != null) {
                     // update used storage in authState
                     authState.user.usedStorage = state.media.usedStorage;
-                    // save user again after storage is updated
-                    BlocProvider.of<AuthCubit>(context)
-                        .saveUserToSharedPrefs(authState.user);
+                    // // save user again after storage is updated
+                    // BlocProvider.of<AuthCubit>(context)
+                    //     .saveUserToSharedPrefs(authState.user);
                   }
                 }
                 return Row(

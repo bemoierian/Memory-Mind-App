@@ -52,4 +52,25 @@ class AuthWebServices {
       return {};
     }
   }
+
+  Future<dynamic> getUser(String token) async {
+    try {
+      var res = await dio.get(
+        'auth/get-user',
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+      // print(res.data);
+      return res.data;
+    } catch (e) {
+      debugPrint("Get user Error in webservice\n $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          return e.response?.data;
+        }
+      }
+      return <String, dynamic>{};
+    }
+  }
 }
