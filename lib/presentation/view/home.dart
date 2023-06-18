@@ -21,7 +21,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController titleInput = TextEditingController();
   final TextEditingController contentInput = TextEditingController();
   DateTime currDate = DateTime.now();
   final scrollController = ScrollController();
@@ -94,9 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (state.media.usedStorage != null) {
                     // update used storage in authState
                     authState.user.usedStorage = state.media.usedStorage;
-                    // // save user again after storage is updated
-                    // BlocProvider.of<AuthCubit>(context)
-                    //     .saveUserToSharedPrefs(authState.user);
                   }
                 }
                 return Row(
@@ -199,15 +195,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     ),
-                    TextField(
-                      decoration: const InputDecoration(
-                          hintText: "Title",
-                          constraints: BoxConstraints(
-                            maxHeight: 300,
-                            maxWidth: 300,
-                          )),
-                      controller: titleInput,
-                    ),
+                    // TextField(
+                    //   decoration: const InputDecoration(
+                    //       hintText: "Title",
+                    //       constraints: BoxConstraints(
+                    //         maxHeight: 300,
+                    //         maxWidth: 300,
+                    //       )),
+                    //   controller: titleInput,
+                    // ),
+                    const SizedBox(height: 30),
                     TextField(
                       decoration: const InputDecoration(
                           hintText: "Content",
@@ -277,7 +274,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 state.bytes,
                                 state.selectedImageName,
                                 state.selectedImageMimeType,
-                                titleInput.text,
                                 contentInput.text,
                                 BlocProvider.of<RemindMeCubit>(parentContext)
                                         .value

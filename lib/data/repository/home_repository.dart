@@ -28,13 +28,12 @@ class HomeRepository {
       Uint8List fileAsBytes,
       String name,
       String mimeType,
-      String title,
       String content,
       String? remindeMeDate,
       String token) async {
     try {
       final media = await homeWebServices.uploadMedia(
-          fileAsBytes, name, mimeType, title, content, remindeMeDate, token);
+          fileAsBytes, name, mimeType, content, remindeMeDate, token);
       final mediaModel = MediaModel.fromJson(media);
       // print(mediaModel.media![0].fileUrl!);
       return mediaModel;

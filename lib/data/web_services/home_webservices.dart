@@ -48,7 +48,6 @@ class HomeWebServices {
       Uint8List fileAsBytes,
       String name,
       String mimeType,
-      String title,
       String content,
       String? remindeMeDate,
       String token) async {
@@ -58,7 +57,6 @@ class HomeWebServices {
       Map<String, dynamic> body = {
         "file": MultipartFile.fromBytes(fileAsBytes,
             filename: name, contentType: MediaType(mediaType1, mediaType2)),
-        "title": title,
         "content": content,
       };
       if (remindeMeDate != null) {
