@@ -29,8 +29,8 @@ class MediaCard extends StatelessWidget {
           children: [
             // image
             SizedBox(
-              width: 170,
-              height: 170,
+              width: 200,
+              height: 200,
               child: Image(
                 image: NetworkImage(mediaURL),
                 fit: BoxFit.cover,
