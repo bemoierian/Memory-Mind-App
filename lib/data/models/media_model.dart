@@ -33,6 +33,7 @@ class Media {
   String? content;
   String? fileUrl;
   String? fileType;
+  double? fileSize;
   String? creator;
   String? createdAt;
   String? updatedAt;
@@ -47,6 +48,7 @@ class Media {
       this.creator,
       this.createdAt,
       this.updatedAt,
+      this.fileSize,
       this.iV});
 
   Media.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class Media {
     content = json['content'];
     fileUrl = json['fileUrl'];
     fileType = json['fileType'];
+    fileSize = json['fileSize'];
     creator = json['creator'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -68,6 +71,7 @@ class Media {
     data['content'] = this.content;
     data['fileUrl'] = this.fileUrl;
     data['fileType'] = this.fileType;
+    data['fileSize'] = this.fileSize;
     data['creator'] = this.creator;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
