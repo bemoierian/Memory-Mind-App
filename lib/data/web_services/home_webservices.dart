@@ -40,7 +40,7 @@ class HomeWebServices {
       return res.data;
     } catch (e) {
       debugPrint("Media $e");
-      return {};
+      return <String, dynamic>{};
     }
   }
 
@@ -75,7 +75,21 @@ class HomeWebServices {
       return response.data;
     } catch (e) {
       debugPrint(e.toString());
-      return '';
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<dynamic> deleteMedia(String mediaID, String token) async {
+    try {
+      var res = await dio.delete('feed/media/$mediaID',
+          options: Options(
+            headers: {"Authorization": "Bearer $token"},
+          ));
+      debugPrint("Delete media status code ${res.statusCode}");
+      return res.statusCode;
+    } catch (e) {
+      debugPrint(e.toString());
+      return 404;
     }
   }
 }

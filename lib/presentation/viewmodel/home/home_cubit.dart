@@ -65,4 +65,19 @@ class HomeCubit extends Cubit<HomeState> {
       debugPrint("Media: ${media.media![0].fileUrl}");
     });
   }
+
+  void deleteMedia(String mediaID, String token) {
+    homeRepository.deleteMedia(mediaID, token).then((statusCode) {
+      if (statusCode == 200) {
+        if (state is HomeLoaded) {
+          final oldMedia = (state as HomeLoaded).media;
+          oldMedia.media!.removeWhere((element) => element.sId == mediaID);
+          emit(HomeLoaded(oldMedia));
+        }
+      } else {
+        debugPrint("Error in deleting media");
+      }
+      // debugPrint("Media: ${media.media![0].fileUrl}");
+    });
+  }
 }

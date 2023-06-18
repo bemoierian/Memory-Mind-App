@@ -63,18 +63,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          // debugPrint("Auth state changed");
-          if (state is AuthSignInSuccessful) {
+        builder: (context, authState) {
+          // debugPrint("Auth authState changed");
+          if (authState is AuthSignInSuccessful) {
             // debugPrint("Getting user media");
             BlocProvider.of<HomeCubit>(context)
-                .getUserMedia(token: state.user.token!);
+                .getUserMedia(token: authState.user.token!);
             if (setupFirstTime) {
-              setupScrollController(context, state.user.token!);
+              setupScrollController(context, authState.user.token!);
 
               setupFirstTime = false;
             }
-          } else if (state is AuthLoggedOut) {
+          } else if (authState is AuthLoggedOut) {
             // debugPrint("Reseting user media");
             BlocProvider.of<HomeCubit>(context).resetUserMedia();
           }
@@ -108,7 +108,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     mediaURL: media[index].fileUrl!,
                     title: media[index].title!,
                     onTapFunc: () {
-                      showMediaDialog(context, media[index]);
+                      showMediaDialog(
+                        context,
+                        media[index],
+                        (authState as AuthSignInSuccessful).user.token!,
+                      );
                     },
                   );
                   // }
@@ -290,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void showMediaDialog(parentContext, Media media) {
+  void showMediaDialog(parentContext, Media media, String token) {
     showDialog(
         context: parentContext,
         builder: (BuildContext context) {
@@ -317,69 +321,93 @@ class _MyHomePageState extends State<MyHomePage> {
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 7,
-                        child: Container(
-                          // height: double.infinity,
-                          padding: const EdgeInsets.all(20.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Title",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                        child: Column(
+                          children: [
+                            Container(
+                              // height: double.infinity,
+                              padding: const EdgeInsets.all(20.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              Text(media.title!),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Content",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Title",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.title!),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Content",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.content!),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Uploaded at",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.createdAt!),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Modified at",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.updatedAt!),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Email Reminder",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.reminderDate ?? "None"),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Type",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(media.fileType!),
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Size",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                      "${(media.fileSize!).toStringAsFixed(2)} MB"),
+                                ],
                               ),
-                              Text(media.content!),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Uploaded at",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                BlocProvider.of<HomeCubit>(parentContext)
+                                    .deleteMedia(media.sId!, token);
+                                Navigator.pop(context);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.red),
                               ),
-                              Text(media.createdAt!),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Modified at",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text(media.updatedAt!),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Email Reminder",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text(media.reminderDate ?? "None"),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Type",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text(media.fileType!),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Size",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                  "${(media.fileSize!).toStringAsFixed(2)} MB"),
-                            ],
-                          ),
+                              child: const Text("Delete"),
+                            ),
+                          ],
                         ),
                       ),
                     ],

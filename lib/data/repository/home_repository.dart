@@ -42,4 +42,14 @@ class HomeRepository {
       return MediaModel();
     }
   }
+
+  Future<int> deleteMedia(String mediaID, String token) async {
+    try {
+      final int statusCode = await homeWebServices.deleteMedia(mediaID, token);
+      return statusCode;
+    } catch (e) {
+      debugPrint("Error in home repository, delete media:\n $e");
+      return 404;
+    }
+  }
 }
