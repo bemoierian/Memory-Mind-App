@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/data/models/signup_res_model.dart';
+import 'package:memory_mind_app/data/models/update_profile_picture_res_model.dart';
 
 import '../models/sign_in_req_model.dart';
 import '../models/signin_res_model.dart';
@@ -42,6 +45,20 @@ class AuthRepository {
     } catch (e) {
       debugPrint("Error in home repository get user:\n $e");
       return SignInResModel();
+    }
+  }
+
+  Future<UpdateProfilePictureResModel> updateProfilePicture(
+      Uint8List fileAsBytes, String name, String mimeType, String token) async {
+    try {
+      final media = await authWebServices.updateProfilePicture(
+          fileAsBytes, name, mimeType, token);
+      final mediaModel = UpdateProfilePictureResModel.fromJson(media);
+      // print(mediaModel.media![0].fileUrl!);
+      return mediaModel;
+    } catch (e) {
+      debugPrint("Error in auth repository - profile picture:\n $e");
+      return UpdateProfilePictureResModel();
     }
   }
 }

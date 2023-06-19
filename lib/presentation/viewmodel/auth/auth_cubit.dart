@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/data/repository/auth_repository.dart';
 import 'package:memory_mind_app/utils/shared_prefs.dart';
@@ -74,5 +77,29 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logOutFromSharedPrefs() async {
     await SharedPrefsUtils.setString("user", "");
+  }
+
+  void updateProfilePicture(
+      Uint8List fileAsBytes, String name, String mimeType, String token) {
+    if (mimeType == "") {
+      return;
+    }
+    if (state is AuthSignInSuccessful) {
+      try {
+        authRepository
+            .updateProfilePicture(fileAsBytes, name, mimeType, token)
+            .then((res) {
+          if (res.message == "Profile picture updated.") {
+            (state as AuthSignInSuccessful).user.profilePictureURL =
+                res.profilePictureURL;
+            emit(AuthSignInSuccessful((state as AuthSignInSuccessful).user));
+          }
+          // emit((state as HomeLoaded).copyWith(media));
+          debugPrint("Media: ${res.profilePictureURL}");
+        });
+      } catch (e) {
+        debugPrint("Error in home cubit:\n $e");
+      }
+    }
   }
 }

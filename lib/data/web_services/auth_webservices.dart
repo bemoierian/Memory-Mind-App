@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../constants/strings.dart';
@@ -65,6 +68,35 @@ class AuthWebServices {
       return res.data;
     } catch (e) {
       debugPrint("Get user Error in webservice\n $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          return e.response?.data;
+        }
+      }
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<dynamic> updateProfilePicture(
+      Uint8List fileAsBytes, String name, String mimeType, String token) async {
+    try {
+      final mediaType1 = mimeType.split('/')[0];
+      final mediaType2 = mimeType.split('/')[1];
+      FormData formData = FormData.fromMap({
+        "file": MultipartFile.fromBytes(fileAsBytes,
+            filename: name, contentType: MediaType(mediaType1, mediaType2)),
+      });
+      var res = await dio.post(
+        'user/update-profile-picture',
+        data: formData,
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+      // print(res.data);
+      return res.data;
+    } catch (e) {
+      debugPrint("Profile picture Error in webservice\n $e");
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           return e.response?.data;

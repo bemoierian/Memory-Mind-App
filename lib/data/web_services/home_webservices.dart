@@ -51,9 +51,9 @@ class HomeWebServices {
       String content,
       String? remindeMeDate,
       String token) async {
-    final mediaType1 = mimeType.split('/')[0];
-    final mediaType2 = mimeType.split('/')[1];
     try {
+      final mediaType1 = mimeType.split('/')[0];
+      final mediaType2 = mimeType.split('/')[1];
       Map<String, dynamic> body = {
         "file": MultipartFile.fromBytes(fileAsBytes,
             filename: name, contentType: MediaType(mediaType1, mediaType2)),

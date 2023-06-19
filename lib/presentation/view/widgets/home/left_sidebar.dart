@@ -6,11 +6,15 @@ class LeftSideBar extends StatelessWidget {
   final String planName;
   final double storageUsed;
   final double storageLimit;
+  final String? profilePictureURL;
+  final Function()? onProfilePictureTap;
   const LeftSideBar(
       {required this.userName,
       required this.planName,
       required this.storageUsed,
       required this.storageLimit,
+      this.profilePictureURL,
+      this.onProfilePictureTap,
       super.key});
 
   @override
@@ -22,11 +26,24 @@ class LeftSideBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 60),
+          GestureDetector(
+            onTap: onProfilePictureTap,
+            child: profilePictureURL != null
+                ? CircleAvatar(
+                    radius: 100,
+                    backgroundImage: NetworkImage(profilePictureURL!),
+                  )
+                : const CircleAvatar(
+                    radius: 100,
+                    child: Icon(Icons.person, size: 50),
+                  ),
+          ),
+          const SizedBox(height: 20),
           Text(
             "Welcome, $userName",
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           Text(
             "$planName Plan",
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),

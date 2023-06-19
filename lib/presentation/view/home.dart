@@ -25,6 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime currDate = DateTime.now();
   final scrollController = ScrollController();
   bool setupFirstTime = true;
+  ImagePickerCubit profilePicturePickerCubit = ImagePickerCubit();
 
   void setupScrollController(context, String token) {
     debugPrint("Setting up scroll controller");
@@ -97,38 +98,75 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return Row(
                   children: [
-                    LeftSideBar(
+                    BlocListener<ImagePickerCubit, ImagePickerState>(
+                      bloc: profilePicturePickerCubit,
+                      listener: (context, state) {
+                        if (state is ImageSelected) {
+                          BlocProvider.of<AuthCubit>(context)
+                              .updateProfilePicture(
+                                  state.bytes,
+                                  state.selectedImageName,
+                                  state.selectedImageMimeType,
+                                  authState.user.token!);
+                        }
+                      },
+                      child: LeftSideBar(
                         userName: authState.user.name!,
                         planName: "Free",
                         storageUsed: authState.user.usedStorage!,
-                        storageLimit: authState.user.storageLimit!),
+                        storageLimit: authState.user.storageLimit!,
+                        profilePictureURL: authState.user.profilePictureURL,
+                        onProfilePictureTap: () {
+                          profilePicturePickerCubit.pickImage();
+                        },
+                      ),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 300,
-                      child: GridView.builder(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      child: SingleChildScrollView(
                         controller: scrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 300,
-                                // childAspectRatio: 3 / 2,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20),
-                        shrinkWrap: true,
-                        itemCount: media.length,
-                        itemBuilder: (context, index) {
-                          return MediaCard(
-                            mediaURL: media[index].fileUrl!,
-                            title: media[index].title!,
-                            onTapFunc: () {
-                              showMediaDialog(
-                                context,
-                                media[index],
-                                (authState).user.token!,
-                              );
-                            },
-                          );
-                          // }
-                        },
+                        child: Column(
+                          children: [
+                            GridView.builder(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                              // controller: scrollController,
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 300,
+                                      // childAspectRatio: 3 / 2,
+                                      crossAxisSpacing: 20,
+                                      mainAxisSpacing: 20),
+                              shrinkWrap: true,
+                              itemCount: media.length,
+                              itemBuilder: (context, index) {
+                                return MediaCard(
+                                  mediaURL: media[index].fileUrl!,
+                                  title: media[index].title!,
+                                  onTapFunc: () {
+                                    showMediaDialog(
+                                      context,
+                                      media[index],
+                                      (authState).user.token!,
+                                    );
+                                  },
+                                );
+                                // }
+                              },
+                            ),
+                            if (state is HomeLoading && !state.firstTime)
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -283,6 +321,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     : null,
                                 token,
                               );
+                              BlocProvider.of<ImagePickerCubit>(context)
+                                  .deleteImage();
                               Navigator.pop(context);
                             },
                             child: const Text("Upload"),

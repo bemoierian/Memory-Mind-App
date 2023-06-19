@@ -5,6 +5,7 @@ class SignInResModel {
   double? usedStorage;
   double? storageLimit;
   String? message;
+  String? profilePictureURL;
 
   SignInResModel(
       {this.token,
@@ -12,7 +13,8 @@ class SignInResModel {
       this.name,
       this.usedStorage,
       this.message,
-      this.storageLimit});
+      this.storageLimit,
+      this.profilePictureURL});
 
   SignInResModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -21,6 +23,7 @@ class SignInResModel {
     usedStorage = json['usedStorage'];
     storageLimit = json['storageLimit'];
     message = json['message'];
+    profilePictureURL = json['profilePictureURL'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +34,7 @@ class SignInResModel {
     data['name'] = this.name;
     data['usedStorage'] = this.usedStorage;
     data['storageLimit'] = this.storageLimit;
+    data['profilePictureURL'] = this.profilePictureURL;
     return data;
   }
 }
