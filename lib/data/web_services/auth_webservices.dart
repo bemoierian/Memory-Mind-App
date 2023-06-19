@@ -56,7 +56,7 @@ class AuthWebServices {
   Future<dynamic> getUser(String token) async {
     try {
       var res = await dio.get(
-        'auth/get-user',
+        'user/get-user',
         options: Options(
           headers: {"Authorization": "Bearer $token"},
         ),
