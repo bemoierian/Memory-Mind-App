@@ -1,3 +1,4 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
@@ -7,6 +8,7 @@ import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/image_picker/image_picker_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/remind_me/remind_me_cubit.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../constants/strings.dart';
 import '../viewmodel/home/home_cubit.dart';
@@ -140,13 +142,20 @@ class _MyHomePageState extends State<MyHomePage> {
                               shrinkWrap: true,
                               itemCount: media.length,
                               itemBuilder: (context, index) {
+                                bool isVideo =
+                                    media[index].fileType!.contains("video");
+
                                 return MediaCard(
                                   mediaURL: media[index].fileUrl!,
                                   title: media[index].title!,
-                                  onTapFunc: () {
+                                  isVideo: isVideo,
+                                  onTapFunc:
+                                      (VideoPlayerController? videoController) {
                                     showMediaDialog(
                                       context,
                                       media[index],
+                                      isVideo,
+                                      videoController,
                                       (authState).user.token!,
                                     );
                                   },
@@ -289,8 +298,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                               DateTime.now().year,
                                               DateTime.now().month,
                                               DateTime.now().day + 1),
-                                          lastDate:
-                                              DateTime(DateTime.now().year + 5),
+                                          lastDate: DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 3),
                                           currentDate: currDate)
                                       .then((value) {
                                     currDate = value!;
@@ -342,128 +353,153 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void showMediaDialog(parentContext, Media media, String token) {
+  void showMediaDialog(parentContext, Media media, bool isVideo,
+      VideoPlayerController? controller, String token) {
+    ChewieController? chewieController;
+    VideoPlayerController? videoPlayerController;
+    if (isVideo && controller != null) {
+      videoPlayerController = controller;
+      chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        autoPlay: false,
+        looping: false,
+      );
+    }
+
     showDialog(
-        context: parentContext,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 20,
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Image.network(
-                            media.fileUrl!,
-                            fit: BoxFit.fitHeight,
-                            // width:
-                            //     MediaQuery.of(context).size.width * 0.8 - 100,
+      context: parentContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 20,
+                      child: !isVideo
+                          ? AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Image.network(
+                                media.fileUrl!,
+                                fit: BoxFit.fitHeight,
+                                // width:
+                                //     MediaQuery.of(context).size.width * 0.8 - 100,
+                              ),
+                            )
+                          : AspectRatio(
+                              aspectRatio: controller!.value.aspectRatio,
+                              child: Chewie(
+                                controller: chewieController!,
+                              ),
+                            ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      flex: 7,
+                      child: Column(
+                        children: [
+                          Container(
+                            // height: double.infinity,
+                            padding: const EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Title",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.title!),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Content",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.content!),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Uploaded at",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.createdAt!),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Modified at",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.updatedAt!),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Email Reminder",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.reminderDate ?? "None"),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Type",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(media.fileType!),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Size",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                    "${(media.fileSize!).toStringAsFixed(2)} MB"),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 7,
-                        child: Column(
-                          children: [
-                            Container(
-                              // height: double.infinity,
-                              padding: const EdgeInsets.all(20.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Title",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.title!),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Content",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.content!),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Uploaded at",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.createdAt!),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Modified at",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.updatedAt!),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Email Reminder",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.reminderDate ?? "None"),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Type",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(media.fileType!),
-                                  const SizedBox(height: 15),
-                                  const Text(
-                                    "Size",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                      "${(media.fileSize!).toStringAsFixed(2)} MB"),
-                                ],
-                              ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              BlocProvider.of<HomeCubit>(parentContext)
+                                  .deleteMedia(media.sId!, token);
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red),
                             ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                BlocProvider.of<HomeCubit>(parentContext)
-                                    .deleteMedia(media.sId!, token);
-                                Navigator.pop(context);
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.red),
-                              ),
-                              child: const Text("Delete"),
-                            ),
-                          ],
-                        ),
+                            child: const Text("Delete"),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    ).then((_) {
+      if (chewieController != null) {
+        debugPrint("Disposing chewie controller");
+        chewieController.dispose();
+      }
+    });
   }
 }

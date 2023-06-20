@@ -41,6 +41,8 @@ dependencies:
   shared_preferences: ^2.1.2
   image_picker: ^0.8.9
   percent_indicator: ^4.2.3
+  video_player: ^2.6.1
+  chewie: ^1.5.0
 
 dev_dependencies:
   flutter_test:
