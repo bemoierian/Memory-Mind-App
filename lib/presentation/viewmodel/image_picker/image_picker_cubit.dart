@@ -10,7 +10,7 @@ class ImagePickerCubit extends Cubit<ImagePickerState> {
   void pickImage() {
     // emit(ImageLoading());
     try {
-      ImagePicker().pickImage(source: ImageSource.gallery).then((imagePicker) {
+      ImagePicker().pickMedia().then((imagePicker) {
         if (imagePicker == null) {
           emit(ImageError());
           return;

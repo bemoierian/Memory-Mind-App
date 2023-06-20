@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MediaCard extends StatefulWidget {
   final String mediaURL;
   final String title;
   final Function onTapFunc;
   final bool isVideo;
-  String? videoThumbnailFileName;
   // final VideoPlayerController? videoPlayerController;
-  MediaCard({
+  const MediaCard({
     required this.mediaURL,
     required this.title,
     required this.onTapFunc,
