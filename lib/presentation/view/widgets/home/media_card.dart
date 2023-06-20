@@ -6,12 +6,14 @@ class MediaCard extends StatefulWidget {
   final String title;
   final Function onTapFunc;
   final bool isVideo;
+  bool init;
   // final VideoPlayerController? videoPlayerController;
-  const MediaCard({
+  MediaCard({
     required this.mediaURL,
     required this.title,
     required this.onTapFunc,
     required this.isVideo,
+    required this.init,
     // this.videoPlayerController,
     super.key,
   });
@@ -28,13 +30,16 @@ class _MediaCardState extends State<MediaCard> {
     if (!_controller!.value.isInitialized) {
       await _controller!.initialize();
       setState(() {
-        debugPrint("Initialized Video Player 1");
+        // debugPrint("Initialized Video Player 1");
+        _controller!.setVolume(0);
+        _controller!.pause();
       });
     }
     if (!_dialogController!.value.isInitialized) {
       await _dialogController!.initialize();
       setState(() {
-        debugPrint("Initialized Video Player 2");
+        // debugPrint("Initialized Video Player 2");
+        _dialogController!.pause();
       });
     }
 
@@ -52,16 +57,26 @@ class _MediaCardState extends State<MediaCard> {
   @override
   void initState() {
     super.initState();
-    if (widget.isVideo) {
-      _controller = VideoPlayerController.network(widget.mediaURL);
-      _dialogController = VideoPlayerController.network(widget.mediaURL);
-      _initVideoPlayer();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     // _initVideoPlayer();
+    if (widget.init) {
+      debugPrint("Init State, isVideo: ${widget.isVideo}");
+      if (widget.isVideo) {
+        if (_controller != null) {
+          _controller!.dispose();
+        }
+        if (_dialogController != null) {
+          _dialogController!.dispose();
+        }
+        _controller = VideoPlayerController.network(widget.mediaURL);
+        _dialogController = VideoPlayerController.network(widget.mediaURL);
+        _initVideoPlayer();
+      }
+      widget.init = false;
+    }
     return GestureDetector(
       onTap: () {
         widget.onTapFunc(_dialogController);

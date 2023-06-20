@@ -144,11 +144,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               itemBuilder: (context, index) {
                                 bool isVideo =
                                     media[index].fileType!.contains("video");
+                                debugPrint("isVideo: $isVideo");
 
                                 return MediaCard(
                                   mediaURL: media[index].fileUrl!,
                                   title: media[index].title!,
                                   isVideo: isVideo,
+                                  init: true,
                                   onTapFunc:
                                       (VideoPlayerController? videoController) {
                                     showMediaDialog(
