@@ -84,6 +84,7 @@ class SignUp extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       TextField(
+                        obscureText: true,
                         decoration: const InputDecoration(
                             hintText: "Enter your password",
                             constraints: BoxConstraints(
