@@ -39,51 +39,73 @@ class SignUp extends StatelessWidget {
             );
           }
         },
-        child: SingleChildScrollView(
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextField(
-                  decoration: const InputDecoration(
-                      hintText: "Enter your name",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: nameInput,
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                      hintText: "Enter your email",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: emailInput,
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                      hintText: "Enter your password",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: pwInput,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthCubit>(context).signUp(SignUpReqModel(
-                        name: nameInput.text,
-                        email: emailInput.text,
-                        password: pwInput.text));
-                  },
-                  child: const Text("Sign Up"),
-                ),
-              ],
-            ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100),
+              Container(
+                  height: 400,
+                  width: 500,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[200],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Sign Up",
+                        style: Theme.of(context).textTheme.headline3,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Enter your name",
+                          constraints: BoxConstraints(
+                            maxHeight: 300,
+                            maxWidth: 300,
+                          ),
+                        ),
+                        controller: nameInput,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Enter your email",
+                          constraints: BoxConstraints(
+                            maxHeight: 300,
+                            maxWidth: 300,
+                          ),
+                        ),
+                        controller: emailInput,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        decoration: const InputDecoration(
+                            hintText: "Enter your password",
+                            constraints: BoxConstraints(
+                              maxHeight: 300,
+                              maxWidth: 300,
+                            )),
+                        controller: pwInput,
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<AuthCubit>(context).signUp(
+                              SignUpReqModel(
+                                  name: nameInput.text,
+                                  email: emailInput.text,
+                                  password: pwInput.text));
+                        },
+                        child: const Text("Sign Up"),
+                      ),
+                    ],
+                  )),
+            ],
           ),
         ),
       ),
