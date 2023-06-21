@@ -1,16 +1,21 @@
-# memory_mind_app
+# Memory Mind App
 
-A new Flutter project.
+Memory Mind keeps your memories in format of images and videos organized in one place, with email notifications available to remind you of a certain memory on a chosen date.
 
-## Getting Started
+## Tools
 
-This project is a starting point for a Flutter application.
+Flutter with BLoC state management using MVVM architecture
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [x] User registration
+- [x] User authentication
+- [x] Keep me logged in
+- [x] User profile (update profile picture, check used storage)
+- [x] Email notifications
+- [x] Infinite scroll (pagination)
+- [x] Add memory (image/video, date, description)
+- [x] Delete memory
+- [x] Update memory
+- [x] View memory details (image/video, date, description)
+- [x] Watch videos
