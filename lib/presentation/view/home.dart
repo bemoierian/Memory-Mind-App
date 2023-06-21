@@ -183,7 +183,33 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 );
               }
-              return const SizedBox();
+              // Logged out home page
+              return SingleChildScrollView(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: const [
+                      SizedBox(height: 100),
+                      Text(
+                        "Welcome to Memory Mind!",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "Memory Mind is a platform to store your memories in the form of images and videos. You can also set reminders for your memories.",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              );
             },
           );
         },
