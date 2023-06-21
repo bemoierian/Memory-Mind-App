@@ -39,41 +39,65 @@ class SignIn extends StatelessWidget {
             );
           }
         },
-        child: SingleChildScrollView(
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextField(
-                  decoration: const InputDecoration(
-                      hintText: "Enter your email",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: emailInput,
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100),
+              Container(
+                height: 300,
+                width: 500,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[200],
                 ),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                      hintText: "Enter your password",
-                      constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: 300,
-                      )),
-                  controller: pwInput,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Sign In",
+                      style: Theme.of(context).textTheme.headline3,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      decoration: const InputDecoration(
+                        hintText: "Enter your email",
+                        constraints: BoxConstraints(
+                          maxHeight: 300,
+                          maxWidth: 300,
+                        ),
+                      ),
+                      controller: emailInput,
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your password",
+                        constraints: BoxConstraints(
+                          maxHeight: 300,
+                          maxWidth: 300,
+                        ),
+                      ),
+                      controller: pwInput,
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<AuthCubit>(context).signIn(
+                            SignInReqModel(
+                                email: emailInput.text,
+                                password: pwInput.text));
+                      },
+                      child: const Text("Sign In"),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthCubit>(context).signIn(SignInReqModel(
-                        email: emailInput.text, password: pwInput.text));
-                  },
-                  child: const Text("Sign In"),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
