@@ -20,6 +20,10 @@ Flutter with BLoC state management using MVVM architecture
 - [x] View memory details (image/video, date, description)
 - [x] Watch videos
 
+## Backend repository
+
+[Memory Mind Backend](https://github.com/bemoierian/Memory-Mind)
+
 ## Screenshots
 
 ![Home logged out](./readme_assets/homeloggedout.png)
