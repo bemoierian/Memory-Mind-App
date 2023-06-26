@@ -14,6 +14,7 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository authRepository;
+  String? userId;
   AuthCubit(this.authRepository) : super(AuthLoggedOut()) {
     signInFromSharedPrefs();
   }
@@ -23,6 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signup(signUpReqModel).then((res) {
         if (res.userId != null) {
+          userId = res.userId;
           emit(AuthVerifyEmail(userId: res.userId!, message: res.message!));
           // emit(AuthSignUpSuccessful(res.message ?? "Sign Up Successful"));
         } else {
@@ -39,6 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signIn(signInReqModel).then((res) {
         if (res.userId != null) {
+          userId = res.userId;
           if (res.isEmailVerified == false) {
             emit(AuthVerifyEmail(userId: res.userId!, message: res.message!));
           } else {
@@ -56,11 +59,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   void verifyEmail(String codeInput) {
     try {
-      String userId = "";
-      if (state is AuthVerifyEmail) {
-        userId = (state as AuthVerifyEmail).userId;
-      }
-
       VerifyEmailReqModel verifyEmailReqModel = VerifyEmailReqModel(
         signUpCode: codeInput,
         userId: userId,
@@ -83,9 +81,26 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  void resendVerificationEmail() {
+    try {
+      // emit(AuthLoading());
+      authRepository.resendVerificationEmail(userId!).then((res) {
+        if (res != 404) {
+          emit(AuthVerifyEmail(
+              userId: userId!, message: "Email sent successfully"));
+        } else {
+          emit(AuthError("Error in resending email"));
+        }
+      });
+    } catch (e) {
+      emit(AuthError("Error in resending email"));
+    }
+  }
+
   void logOut() {
     logOutFromSharedPrefs().then(
       (value) {
+        userId = null;
         emit(AuthLoggedOut());
       },
     );
@@ -97,6 +112,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (user != '') {
       // final userModel = SignInResModel.fromJson(jsonDecode(user));
       authRepository.getUser(user).then((value) {
+        userId = value.userId;
         emit(AuthSignInSuccessful(value));
       });
       // emit(AuthSignInSuccessful(userModel));

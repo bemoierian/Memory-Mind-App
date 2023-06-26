@@ -50,6 +50,16 @@ class AuthRepository {
     }
   }
 
+  Future<int> resendVerificationEmail(String userId) async {
+    try {
+      final statusCode = await authWebServices.resendVerificationEmail(userId);
+      return statusCode;
+    } catch (e) {
+      debugPrint("Error in auth repo - resend email:\n $e");
+      return 404;
+    }
+  }
+
   Future<SignInResModel> getUser(String token) async {
     try {
       final res = await authWebServices.getUser(token);

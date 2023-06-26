@@ -75,6 +75,25 @@ class AuthWebServices {
     }
   }
 
+  Future<dynamic> resendVerificationEmail(String userId) async {
+    try {
+      var res = await dio.post(
+        'auth/resend-signup-code',
+        data: {
+          "userId": userId,
+        },
+      );
+      // print(res.data);
+      return res.statusCode;
+    } catch (e) {
+      debugPrint("Resend email Error in webservice\n $e");
+      if (e is DioException) {
+        return e.response?.statusCode ?? 404;
+      }
+      return 404;
+    }
+  }
+
   Future<dynamic> getUser(String token) async {
     try {
       var res = await dio.get(

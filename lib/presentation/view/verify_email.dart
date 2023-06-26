@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:memory_mind_app/data/models/verify_email_req_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 
 import '../../constants/strings.dart';
-import '../../data/models/sign_in_req_model.dart';
 
 class VerifyEmail extends StatelessWidget {
   final TextEditingController codeInput = TextEditingController();
@@ -72,7 +70,21 @@ class VerifyEmail extends StatelessWidget {
                       ),
                       controller: codeInput,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            BlocProvider.of<AuthCubit>(context)
+                                .resendVerificationEmail();
+                          },
+                          child: const Text("Resend Email"),
+                        ),
+                        // const SizedBox(width: 20),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         BlocProvider.of<AuthCubit>(context)
