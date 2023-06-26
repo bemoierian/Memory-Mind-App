@@ -6,6 +6,7 @@ import 'package:memory_mind_app/data/web_services/home_webservices.dart';
 import 'package:memory_mind_app/presentation/view/home.dart';
 import 'package:memory_mind_app/presentation/view/signin.dart';
 import 'package:memory_mind_app/presentation/view/signup.dart';
+import 'package:memory_mind_app/presentation/view/verify_email.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/home/home_cubit.dart';
 import 'package:memory_mind_app/presentation/viewmodel/image_picker/image_picker_cubit.dart';
@@ -78,6 +79,17 @@ class AppRouter {
               ),
             ],
             child: SignIn(),
+          ),
+        );
+      case verifyEmailPageRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: authCubit,
+              ),
+            ],
+            child: VerifyEmail(),
           ),
         );
       default:

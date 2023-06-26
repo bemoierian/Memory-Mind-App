@@ -52,7 +52,26 @@ class AuthWebServices {
           return e.response?.data;
         }
       }
-      return {};
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<dynamic> verifyEmail(Map<String, dynamic> verifyEmailReqModel) async {
+    try {
+      var res = await dio.post(
+        'auth/verify-email',
+        data: verifyEmailReqModel,
+      );
+      // print(res.data);
+      return res.data;
+    } catch (e) {
+      debugPrint("Verify email Error in webservice\n $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          return e.response?.data;
+        }
+      }
+      return <String, dynamic>{};
     }
   }
 

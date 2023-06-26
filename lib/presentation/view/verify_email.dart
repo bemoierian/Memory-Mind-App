@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_mind_app/data/models/verify_email_req_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
 
 import '../../constants/strings.dart';
 import '../../data/models/sign_in_req_model.dart';
 
-class SignIn extends StatelessWidget {
-  final TextEditingController emailInput = TextEditingController();
-  final TextEditingController pwInput = TextEditingController();
-  SignIn({super.key});
+class VerifyEmail extends StatelessWidget {
+  final TextEditingController codeInput = TextEditingController();
+  VerifyEmail({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,6 @@ class SignIn extends StatelessWidget {
               ),
             );
             Navigator.of(context).pushReplacementNamed(homePageRoute);
-          } else if (state is AuthVerifyEmail) {
-            Navigator.of(context).pushReplacementNamed(verifyEmailPageRoute);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -59,40 +57,26 @@ class SignIn extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Sign In",
+                      "Verify Your Email!",
                       style: Theme.of(context).textTheme.headline3,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
                     TextField(
                       decoration: const InputDecoration(
-                        hintText: "Enter your email",
+                        hintText: "Enter your verification code",
                         constraints: BoxConstraints(
                           maxHeight: 300,
                           maxWidth: 300,
                         ),
                       ),
-                      controller: emailInput,
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        hintText: "Enter your password",
-                        constraints: BoxConstraints(
-                          maxHeight: 300,
-                          maxWidth: 300,
-                        ),
-                      ),
-                      controller: pwInput,
+                      controller: codeInput,
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: () {
-                        BlocProvider.of<AuthCubit>(context).signIn(
-                            SignInReqModel(
-                                email: emailInput.text,
-                                password: pwInput.text));
+                        BlocProvider.of<AuthCubit>(context)
+                            .verifyEmail(codeInput.text);
                       },
                       child: BlocBuilder<AuthCubit, AuthState>(
                         builder: (context, state) {
@@ -104,7 +88,7 @@ class SignIn extends StatelessWidget {
                                   color: Colors.white,
                                 ));
                           }
-                          return const Text("Sign In");
+                          return const Text("Verify");
                         },
                       ),
                     ),

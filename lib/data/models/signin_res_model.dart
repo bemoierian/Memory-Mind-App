@@ -6,15 +6,17 @@ class SignInResModel {
   double? storageLimit;
   String? message;
   String? profilePictureURL;
-
-  SignInResModel(
-      {this.token,
-      this.userId,
-      this.name,
-      this.usedStorage,
-      this.message,
-      this.storageLimit,
-      this.profilePictureURL});
+  bool? isEmailVerified;
+  SignInResModel({
+    this.token,
+    this.userId,
+    this.name,
+    this.usedStorage,
+    this.message,
+    this.storageLimit,
+    this.profilePictureURL,
+    this.isEmailVerified,
+  });
 
   SignInResModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -24,6 +26,7 @@ class SignInResModel {
     storageLimit = json['storageLimit'];
     message = json['message'];
     profilePictureURL = json['profilePictureURL'];
+    isEmailVerified = json['isEmailVerified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class SignInResModel {
     data['usedStorage'] = this.usedStorage;
     data['storageLimit'] = this.storageLimit;
     data['profilePictureURL'] = this.profilePictureURL;
+    data['isEmailVerified'] = this.isEmailVerified;
     return data;
   }
 }

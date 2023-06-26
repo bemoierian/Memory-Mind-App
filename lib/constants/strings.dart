@@ -5,3 +5,4 @@ const appTitle = 'Memory Mind';
 const homePageRoute = '/home';
 const signUpPageRoute = '/signup';
 const signInPageRoute = '/signin';
+const verifyEmailPageRoute = '/verify-email';

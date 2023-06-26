@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/signup_req_model.dart';
 import 'package:memory_mind_app/data/models/signup_res_model.dart';
 import 'package:memory_mind_app/data/models/update_profile_picture_res_model.dart';
+import 'package:memory_mind_app/data/models/verify_email_req_model.dart';
 
 import '../models/sign_in_req_model.dart';
 import '../models/signin_res_model.dart';
@@ -28,6 +29,19 @@ class AuthRepository {
   Future<SignInResModel> signIn(SignInReqModel signInReqModel) async {
     try {
       final res = await authWebServices.signIn(signInReqModel.toJson());
+      final signInResModel = SignInResModel.fromJson(res);
+      return signInResModel;
+    } catch (e) {
+      debugPrint("Error in home repository Sign In:\n $e");
+      return SignInResModel();
+    }
+  }
+
+  Future<SignInResModel> verifyEmail(
+      VerifyEmailReqModel verifyEmailReqModel) async {
+    try {
+      final res =
+          await authWebServices.verifyEmail(verifyEmailReqModel.toJson());
       final signInResModel = SignInResModel.fromJson(res);
       return signInResModel;
     } catch (e) {

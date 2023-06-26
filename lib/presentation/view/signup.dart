@@ -31,6 +31,8 @@ class SignUp extends StatelessWidget {
               ),
             );
             Navigator.of(context).pushReplacementNamed(signInPageRoute);
+          } else if (state is AuthVerifyEmail) {
+            Navigator.of(context).pushReplacementNamed(verifyEmailPageRoute);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

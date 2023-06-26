@@ -22,3 +22,9 @@ class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
 }
+
+class AuthVerifyEmail extends AuthState {
+  final String message;
+  final String userId;
+  AuthVerifyEmail({required this.message, required this.userId});
+}

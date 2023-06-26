@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:memory_mind_app/data/models/signup_req_model.dart';
+import 'package:memory_mind_app/data/models/verify_email_req_model.dart';
 import 'package:memory_mind_app/data/repository/auth_repository.dart';
 import 'package:memory_mind_app/utils/shared_prefs.dart';
 
@@ -22,7 +23,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signup(signUpReqModel).then((res) {
         if (res.userId != null) {
-          emit(AuthSignUpSuccessful(res.message ?? "Sign Up Successful"));
+          emit(AuthVerifyEmail(userId: res.userId!, message: res.message!));
+          // emit(AuthSignUpSuccessful(res.message ?? "Sign Up Successful"));
         } else {
           emit(AuthError(res.message ?? "Error In Sign Up"));
         }
@@ -37,14 +39,47 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       authRepository.signIn(signInReqModel).then((res) {
         if (res.userId != null) {
-          saveUserToSharedPrefs(res.token!);
-          emit(AuthSignInSuccessful(res));
+          if (res.isEmailVerified == false) {
+            emit(AuthVerifyEmail(userId: res.userId!, message: res.message!));
+          } else {
+            saveUserToSharedPrefs(res.token!);
+            emit(AuthSignInSuccessful(res));
+          }
         } else {
           emit(AuthError(res.message ?? "Error In Sign In"));
         }
       });
     } catch (e) {
       emit(AuthError("Error In Sign In"));
+    }
+  }
+
+  void verifyEmail(String codeInput) {
+    try {
+      String userId = "";
+      if (state is AuthVerifyEmail) {
+        userId = (state as AuthVerifyEmail).userId;
+      }
+
+      VerifyEmailReqModel verifyEmailReqModel = VerifyEmailReqModel(
+        signUpCode: codeInput,
+        userId: userId,
+      );
+      emit(AuthLoading());
+      authRepository.verifyEmail(verifyEmailReqModel).then((res) {
+        if (res.userId != null) {
+          if (res.isEmailVerified == false) {
+            emit(AuthVerifyEmail(userId: res.userId!, message: res.message!));
+          } else {
+            saveUserToSharedPrefs(res.token!);
+            emit(AuthSignInSuccessful(res));
+          }
+        } else {
+          emit(AuthError(res.message ?? "Error in verifying email"));
+        }
+      });
+    } catch (e) {
+      emit(AuthError("Error in verifying email"));
     }
   }
 
