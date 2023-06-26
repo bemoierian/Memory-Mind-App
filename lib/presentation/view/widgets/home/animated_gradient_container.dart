@@ -26,12 +26,14 @@ class _AnimatedGradientContainerState extends State<AnimatedGradientContainer> {
   void initState() {
     super.initState();
     Timer.periodic(const Duration(seconds: 2), (timer) {
-      setState(() {
-        index++;
-        if (index >= colors.length) {
-          index = 0;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          index++;
+          if (index >= colors.length) {
+            index = 0;
+          }
+        });
+      }
     });
   }
 
