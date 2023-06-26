@@ -124,63 +124,94 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width - 300,
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: Column(
-                          children: [
-                            GridView.builder(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                              // controller: scrollController,
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 300,
-                                      // childAspectRatio: 3 / 2,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20),
-                              shrinkWrap: true,
-                              itemCount: media.length,
-                              itemBuilder: (context, index) {
-                                bool isVideo =
-                                    media[index].fileType!.contains("video");
-                                debugPrint("isVideo: $isVideo");
+                    media.isNotEmpty
+                        ? SizedBox(
+                            width: MediaQuery.of(context).size.width - 300,
+                            child: SingleChildScrollView(
+                              controller: scrollController,
+                              child: Column(
+                                children: [
+                                  GridView.builder(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 20, 20),
+                                    // controller: scrollController,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 300,
+                                            // childAspectRatio: 3 / 2,
+                                            crossAxisSpacing: 20,
+                                            mainAxisSpacing: 20),
+                                    shrinkWrap: true,
+                                    itemCount: media.length,
+                                    itemBuilder: (context, index) {
+                                      bool isVideo = media[index]
+                                          .fileType!
+                                          .contains("video");
+                                      debugPrint("isVideo: $isVideo");
 
-                                return MediaCard(
-                                  mediaURL: media[index].fileUrl!,
-                                  title: media[index].title!,
-                                  isVideo: isVideo,
-                                  init: true,
-                                  onTapFunc:
-                                      (VideoPlayerController? videoController) {
-                                    showMediaDialog(
-                                      context,
-                                      media[index],
-                                      isVideo,
-                                      videoController,
-                                      (authState).user.token!,
-                                    );
-                                  },
-                                );
-                                // }
-                              },
-                            ),
-                            if (state is HomeLoading && !state.firstTime)
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(),
+                                      return MediaCard(
+                                        mediaURL: media[index].fileUrl!,
+                                        title: media[index].title!,
+                                        isVideo: isVideo,
+                                        init: true,
+                                        onTapFunc: (VideoPlayerController?
+                                            videoController) {
+                                          showMediaDialog(
+                                            context,
+                                            media[index],
+                                            isVideo,
+                                            videoController,
+                                            (authState).user.token!,
+                                          );
+                                        },
+                                      );
+                                      // }
+                                    },
                                   ),
-                                ),
+                                  if (state is HomeLoading && !state.firstTime)
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ),
-                    ),
+                            ),
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 300,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: AssetImage("logo2.jpeg"),
+                                  ),
+                                  SizedBox(height: 50),
+                                  Text(
+                                    "Wow, such empty!",
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    "Upload your photos and videos to start using Memory Mind.",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                   ],
                 );
               }
