@@ -30,7 +30,16 @@ class MemoryMindAppBar extends StatelessWidget {
                 Navigator.pushNamed(context, homePageRoute);
               }
             }),
-            child: Text(title, style: Theme.of(context).textTheme.headline6),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage("logo2.jpeg"),
+                ),
+                const SizedBox(width: 10),
+                Text(title, style: Theme.of(context).textTheme.headline6),
+              ],
+            ),
           ),
           const SizedBox(
             width: 10,

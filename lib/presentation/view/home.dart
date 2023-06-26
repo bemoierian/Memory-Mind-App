@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
+import 'package:memory_mind_app/presentation/view/widgets/home/animated_gradient_container.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/left_sidebar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/media_card.dart';
 import 'package:memory_mind_app/presentation/viewmodel/auth/auth_cubit.dart';
@@ -184,17 +185,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               }
               // Logged out home page
-              return SingleChildScrollView(
-                child: SizedBox(
-                  width: double.infinity,
+              return SizedBox(
+                width: double.infinity,
+                child: AnimatedGradientContainer(
                   child: Column(
                     children: const [
                       SizedBox(height: 100),
+                      CircleAvatar(
+                        radius: 100,
+                        backgroundImage: AssetImage("logo2.jpeg"),
+                      ),
+                      SizedBox(height: 50),
                       Text(
                         "Welcome to Memory Mind!",
                         style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -202,6 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         "Memory Mind is a platform to store your memories in the form of images and videos. You can also set reminders for your memories.",
                         style: TextStyle(
                           fontSize: 20,
+                          color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
                       ),
