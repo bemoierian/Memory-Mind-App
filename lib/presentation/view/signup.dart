@@ -102,7 +102,19 @@ class SignUp extends StatelessWidget {
                                   email: emailInput.text,
                                   password: pwInput.text));
                         },
-                        child: const Text("Sign Up"),
+                        child: BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, state) {
+                            if (state is AuthLoading) {
+                              return const SizedBox(
+                                  width: 10,
+                                  height: 10,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ));
+                            }
+                            return const Text("Sign Up");
+                          },
+                        ),
                       ),
                     ],
                   )),
