@@ -1,6 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:memory_mind_app/data/models/media_model.dart';
 import 'package:memory_mind_app/presentation/view/widgets/appbar/appbar.dart';
 import 'package:memory_mind_app/presentation/view/widgets/home/animated_gradient_container.dart';
@@ -432,6 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
         looping: false,
       );
     }
+    final f = DateFormat('yyyy-MM-dd hh:mm a');
 
     showDialog(
       context: parentContext,
@@ -502,7 +504,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(media.createdAt!),
+                                Text(f.format(DateTime.parse(media.createdAt!)
+                                    .toLocal())),
                                 const SizedBox(height: 15),
                                 const Text(
                                   "Modified at",
@@ -510,7 +513,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(media.updatedAt!),
+                                Text(f.format(DateTime.parse(media.updatedAt!)
+                                    .toLocal())),
                                 const SizedBox(height: 15),
                                 const Text(
                                   "Email Reminder",
